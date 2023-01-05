@@ -25,20 +25,20 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   // QUERY PARAMATERS
   //    image_url: URL of a publicly accessible image
   // RETURNS
-  //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
+  //   the filtered image file [!!TIP response.sendFile(filteredpath); might be useful]
 
-  app.get( "/filteredimage", async ( req, res ) => {
-    let image_url: string = req.query.image_url.toString();
+  app.get( "/filteredimage", async ( request, response ) => {
+    let image_url: string = request.query.image_url.toString();
     if (!image_url) {
-      res.send("You must send image_url query param")
+      response.status(422).send("You must send image_url query param")
       console.log( `Error: image_url query param is not sent ` );
     }
 
     let filteredpath = await filterImageFromURL(image_url);
 
-    res.sendFile(filteredpath);
+    response.sendFile(filteredpath);
 
-    res.on('finish',async () => {
+    response.on('finish',async () => {
       await deleteLocalFiles([filteredpath]);
     });
   } );
@@ -49,8 +49,8 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
-    res.send("try GET /filteredimage?image_url={{}}")
+  app.get( "/", async ( request, response ) => {
+    response.send("try GET /filteredimage?image_url={{}}")
   } );
   
 
