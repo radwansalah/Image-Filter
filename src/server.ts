@@ -30,7 +30,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   app.get( "/filteredimage", async ( request, response ) => {
     let image_url: string = request.query.image_url.toString();
     if (!image_url) {
-      response.send("You must send image_url query param")
+      response.status(422).send("You must send image_url query param")
       console.log( `Error: image_url query param is not sent ` );
     }
 
